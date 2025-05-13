@@ -1,0 +1,16 @@
+<form id="#optionModelForm" method="POST">
+    {% csrf_token %}
+    <label for="model">Choose a model:</label>
+
+    <select id="modelOption" name="model" class="form-select">
+        {% for model in models %}
+            <option value="{{ model }}">{{ model }}</option>
+        {% endfor %}
+    </select>
+
+    <select id="modelMode" name="mode" class="form-select">
+        <option value="patch">Switch Model</option>
+    </select>
+
+    <input type='submit' class="btn btn-sm btn-primary" value="Submit" />
+</form>

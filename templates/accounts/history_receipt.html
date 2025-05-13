@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Receipt</title>
+    <link rel="stylesheet" href="{% static 'css/receipt_style.css' %}" media="all" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  </head>
+  <body>
+    <header class="clearfix">
+      <h1>INVOICE</h1>
+      <div id="company" class="clearfix">
+        <div>Skripsi Tourism</div>
+        <div>South Jakarta,<br /> Indonesia</div>
+        <div>(+62) 9898 9898 98</div>
+        <div><a href="mailto:skripsi.tourism@example.com">skripsi.tourism@example.com</a></div>
+      </div>
+      <div id="project">
+        <div><span>USER</span> {{ content.user.full_name }}</div>
+        <div><span>ADDRESS</span> {{ content.user.location }}</div>
+        <div><span>EMAIL</span> <a href="mailto:{{ content.user.email }}">{{ content.user.email }}</a></div>
+        <div><span>CREATED</span> {{ content.time }}</div>
+        <div><span>BOOK DATE</span> {{ content.book_date }}</div>
+      </div>
+    </header>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th class="service">SITES</th>
+            <th class="desc">DESCRIPTION</th>
+            <th>PRICE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="service">{{ content.place.place_name }}</td>
+            <td class="desc">{{ content.place.description }}</td>
+            <td class="unit">{{ content.place.price }}</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="grand total">GRAND TOTAL</td>
+            <td id="grandTotal" class="grand total"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="notices">
+        <div class="notice">STATUS: <span style="font-weight:bold;">{{ content.status }}</span></div>
+      </div>
+    </main>
+    <footer>
+      Invoice was created on a computer and is valid without the signature and seal.
+    </footer>
+
+    <script>
+        $(window).on('load', (e) => {
+            e.preventDefault();
+
+            let total_value = 0
+
+            $('.unit').each((index, unit) => {
+                total_value += parseInt(unit.textContent)
+
+                unit.textContent = `Rp ${unit.textContent.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
+            });
+
+            $("#grandTotal").html(total_value ? `Rp ${total_value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}` : 0)
+        })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}Account - Sign in{% endblock %}
+{% block content %}
+	<div id='content' class="container my-5 py-5 placeholder-glow">
+		<img class="placeholder" src="{% static 'images/wonderful_indonesia_logo.png' %}" width="300">
+		<div class="d-flex flex-row justify-content-between">
+			<div class="p-5 text-dark">
+				<h1 class="fw-bold">Tourism recommendation</h1>
+			</div>
+
+			<div class="card card-shadow card-radius p-3 w-50" data-aos="fade-up">
+				{% if messages %}
+					{% for message in messages %}
+						<h6 class="text-white card bg-danger p-2 text-center" data-aos="fade-up">{{ message }}</h6>
+					{% endfor %}
+				{% endif %}
+				<form action="{% url 'frontend:account_login' %}" method="POST" class="form-display form-activate" data-aos="fade-up">
+					{% csrf_token %}
+					<section class="py-3 text-white d-flex flex-column">
+						<label for="email">Email</label>
+						{{loginForm.email}}
+						{{loginForm.email.errors}}
+					</section>
+					
+
+					<section class="py-3 text-white d-flex flex-column">
+						<label for="password">Password</label>
+						{{loginForm.password}}
+						{{loginForm.password.errors}}
+					</section>
+
+					<section class="py-3 text-white d-flex flex-column">
+						<a href="{% url 'frontend:password_reset' %}">Forgot your password?</a>
+					</section>
+
+					{% if request.GET.next %}
+						<section class="py-3">
+							<input type="hidden" name="next" value="{{request.GET.next}}">
+						</section>
+					{% endif %}
+
+					<section class="py-3 text-white d-flex flex-column">
+						<button type="submit" class="btn btn-light w-100">Log in</button> 
+					</section>
+				</form>
+				<form action="{% url 'frontend:account_register' %}" method="POST" class="form-display">
+					{% csrf_token %}
+					<section class="py-3 text-white d-flex flex-column">
+						<label for="email">Email</label>
+						{{registrationForm.email}}
+						{{registrationForm.email.errors}}
+					</section>
+					
+					<section class="py-3 text-white d-flex flex-column">
+						<label for="password">Password</label>
+						{{registrationForm.password}}
+						{{registationForm.password.errors}}
+					</section>
+
+					<section class="py-3 text-white d-flex flex-column">
+						<label for="age">Age</label>
+						{{registrationForm.age}}
+						{{registationForm.age.errors}}
+					</section>
+
+					<section class="py-3">
+						<button type="submit" class="btn btn-light w-100">Sign Up</button> 
+					</section>
+				</form>
+				<button id='btn_register_login' class="btn btn-dark" onclick="toggleLoginRegister()">Register</button>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="{% static 'js/register_login.js' %}"></script>
+{% endblock %}

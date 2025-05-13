@@ -1,0 +1,10 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}404 Not Found{% endblock %}
+{% block content %}
+	<div class="container text-dark">
+		<h1 class="fw-bold">404</h1>
+		<h4 class="">Not Found</h4>
+		<p>Please return to the <a href="{% url 'frontend:index' %}">Home</a> page</p>
+	</div>
+{% endblock %}

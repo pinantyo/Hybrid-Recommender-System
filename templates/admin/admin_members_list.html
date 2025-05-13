@@ -1,0 +1,29 @@
+{% load static %}
+<ul class="list-group list-group-flush list my--3">
+    {% for admin in admins %}
+        <li class="list-group-item px-0">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <!-- Avatar -->
+                    <a href="#" class="avatar">
+                        <img class="rounded" alt="Image placeholder" src="{% static 'admin_volt/assets/img/teams/user.jpg' %}">
+                    </a>
+                </div>
+                <div class="col-auto ms--2">
+                    <h4 class="h6 mb-0">
+                        <a href="#">{{ admin.email }}</a>
+                    </h4>
+                    <div class="d-flex align-items-center">
+                        {% if admin.is_active %}
+                            <div class="bg-success dot rounded-circle me-1"></div>
+                            <small>Online</small>
+                        {% else %}
+                            <div class="bg-danger dot rounded-circle me-1"></div>
+                            <small>Offline</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </li>
+    {% endfor %}
+</ul>

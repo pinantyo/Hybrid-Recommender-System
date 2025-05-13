@@ -1,0 +1,193 @@
+{% extends 'layouts/base.html' %}
+{% block title %}{% endblock %}
+{% load static %}
+{% block css %}
+	<link type="text/css" href="{% static 'css/owl.carousel.min.css' %}" rel="stylesheet">
+	<link type="text/css" href="{% static 'css/owl.theme.default.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block js %}
+	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+{% endblock %}
+{% block content %}
+	<div class="container my-5 py-5">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-sm-8 placeholder-glow" data-aos="fade-right">
+					<img id="Img" class="card-img-top placeholder" src="#">
+
+					<!-- Button trigger modal -->
+					<button type="button" class="w-100 btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookModal">
+						Visit
+					</button>
+
+					<div id="toastNotifSuccess" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+					
+					<!-- Modal -->
+					<div class="modal fade" id="bookModal" tabindex="-1" aria-labelledby="bookModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h1 class="modal-title fs-5 text-center w-100" id="bookModalLabel">Booking</h1>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<form id="formReservation" method="POST">
+										{% csrf_token %}
+										<fieldset>
+											<legends class="fw-bold">Personal Information</legends>
+											<hr>
+											<section>
+												<input class="form-control" type="hidden" name="user"  value="{{ request.user.id }}" />
+											</section>
+
+											<section>
+												<label>Fullname</label>
+												<input class="form-control" type="text" name="full_name" placeholder="Your fullname" value="{{ request.user.full_name }}" required />
+											</section>
+
+											<section>
+												<label>Location</label>
+												<input class="form-control" type="text" name="userLocation" placeholder="Your location" value="{{ request.user.location }}" required />
+											</section>
+
+											<section>
+												<label>Email</label>
+												<input class="form-control" type="text" name="email" placeholder="Your email" value="{{ request.user.email }}" required />
+											</section>
+										</fieldset>
+										
+										<fieldset>
+											<hr>
+											<legends class="fw-bold">Reservation Information</legends>
+											<hr>
+											<p class="fw-bold">Do you confirm that you will visit this site?</p>
+
+											<section>
+												<input type="hidden" id="placeId" name="place"/>
+											</section>
+
+											<section>
+												<label>Place</label>
+												<p id="placeName" class="form-control"></p>
+											</section>
+
+											<section>
+												<label>Location</label>
+												<p id="placeLocation" class="form-control"></p>
+											</section>
+
+											<section>
+												<label>Price</label>
+												<p id="placePrice" class="form-control"></p>
+											</section>
+
+											<section>
+												<label>Book Date</label>
+												<input id="bookDate" type="date" name="book_date" class="form-control" min="" required />
+											</section>
+										</fieldset>
+
+										<div class="my-2">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+											<button type="submit" name="submit" class="btn btn-primary">Book</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-4 card bg-dark placeholder-glow" data-aos="fade-left">
+					<div class="card-text text-white p-5">
+						<h1 id="Title" class="card-title placeholder"></h1>
+						<span id="Ratings" class="my-3 placeholder">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+							  <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+							</svg>
+						</span>
+						<p id="Desc" class="card-text justify-content-align placeholder"></p>
+						<br>
+						<div id="Price" class="float-end fs-2 placeholder"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-12 my-5 py-5" data-aos="fade-up">
+			<div class="d-flex flex-row justify-content-between">
+				<div class="col-sm-3 card bg-dark placeholder-glow text-white p-5">
+					<div class="my-auto">
+						<h4>Rating</h4><h1 id="ratingScore" class="text-center m-5 fs-1"></h1>
+						<span id="ratingStar" class="d-flex justify-content-evenly m-5"></span>
+					</div>
+				</div>
+				
+				<div id="ratingComments" class="col-sm-8 card bg-dark placeholder-glow p-5 text-white" style="height: 100vh;">
+					<div class="my-3">
+						<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-plus-lg" viewBox="0 0 16 16">
+								<path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+							</svg>
+							Feedbacks
+						</button>
+
+						<!-- Modal -->
+						<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h1 class="modal-title fs-5 text-center w-100 text-black" id="feedbackModalLabel">Feedback</h1>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body">
+									<form id="formFeedback" method="POST">
+										{% csrf_token %}
+										<section>
+											<label class="text-black" for="rating">Rate us</label>
+											<input type="number" name="rating" min="1" max="5" class="form-control">
+										</section>
+
+										<section>
+											<label class="text-black" for="feedback">Give us your feedbacks</label>
+											<textarea name="feedback" class="form-control" rows="4" cols="50"></textarea>
+										</section>
+
+
+										<div class="my-3">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+											<button type="submit" name="submit" class="btn btn-primary">Send</button>
+										</div>										
+									</form>
+								</div>
+							</div>
+							</div>
+						</div>
+
+
+					</div>
+					<div id="container-horizontal-scrolled">
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="my-5 py-5">
+			<h1 class="text-title" data-aos="fade-up">Similar Tourism Attractions</h1>
+
+			<div id="container-horizontal-scrolled" class="row-content similar-reccomendation"></div>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="{% static 'js/horizontal_grab_scroll.js' %}"></script>
+	<script>
+		$('.owl-carousel').owlCarousel({
+			loop:false,
+			items:2
+		});
+	</script>
+	<script type="text/javascript" src="{% static 'js/ajax/site.js' %}"></script>
+
+{% endblock %}

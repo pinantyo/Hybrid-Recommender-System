@@ -1,0 +1,53 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+{% block css %}
+	<link type="text/css" href="{% static 'css/owl.carousel.min.css' %}" rel="stylesheet">
+	<link type="text/css" href="{% static 'css/owl.theme.default.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block js %}
+	<script text="text/javascript" src="{% static 'js/owl.carousel.min.js' %}"></script>
+{% endblock %}
+{% block content %}
+	<div id="reccContainer" class="container my-5 py-5">
+		<h1 class="text-title">Recommended Tourist Attractions</h1>
+		<div id="container-horizontal-scrolled" class="row-content"></div>
+	</div>
+
+	<div class="container my-5 py-5 content-tourism">
+		<h1 class="text-title">Other Alternative Tourist Attractions</h1>
+		<div class="d-flex flex-wrap content-display justify-content-evenly"></div>
+	</div>
+
+	<div class="container my-5 py-5">
+	    <span class="step-links">
+		    <ul class="pagination justify-content-start mt-3">
+
+		      	<li class="page-item pe-auto">
+		        	<button id="previousContent" class="page-link" onclick="previousPaginationTourism()" tabindex="-1">Previous</button>
+		      	</li>
+
+	      		<li class="page-item pe-auto">
+	        		<button id="nextContent" class="page-link" onclick="nextPaginationTourism()" tabindex="-1">Next</button>
+	      		</li>
+		    </ul>
+	    </span>
+	</div>
+
+
+	<script type="text/javascript" src="{% static 'js/horizontal_grab_scroll.js' %}"></script>
+	<script>
+		$(document).ready(() => {
+			$('.owl-carousel').owlCarousel({
+			  loop: true,
+			  items:2
+			});
+		});	
+	</script>
+
+	<script text="text/javascript" src="{% static 'js/ajax/index.js' %}"></script>
+		
+
+		
+
+{% endblock %}

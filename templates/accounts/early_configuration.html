@@ -1,0 +1,45 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %}Configuration{% endblock %}
+
+{% block content %}
+    <div class="container my-5 d-flex justify-content-betweeen">
+        <div class="p-2 col-5">
+            <h2 class="text-dark fw-bold">Welcome to Indonesia Tourism Attractions</h2>
+            <h4 class="text-dark">Please choose 4 tourism attractions that you potentialy liked</h4>
+        </div>
+
+        <div class="p-2 col-7">
+            <form method="POST" action="{% url 'frontend:account_early_configuration' %}">
+                {% csrf_token %}
+                <div class="d-flex flex-row" style="flex-wrap:wrap;">
+                    {% for content in contents %}
+                        <section class="mb-5">
+                            <label for="tourism_places">
+                                <div class="card" style="width: 13rem;">
+                                    <img src="{{ content.img.url }}" class="card-img-top" style="border-radius:0.375rem!important" width="206.4" height="149.583">
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ content.place_name|truncatewords:2 }}</h6>
+                                        <h6 class="card-title">{{ content.city }}</h6>
+                                    </div>
+                                </div>
+                            </label>
+                            <input type="checkbox" class="form-check" id="tourism{{ content.place_id }}" name="tourism_personalization" value="{{ content.place_id }}">
+                        </section>
+                    {% endfor %}
+                </div>
+                <input type="submit" class="btn btn-primary" value="Submit" disabled>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        $('input[type=checkbox]').on('change', function (e) {
+            $(':submit').attr("disabled", true)
+            if ($('input[type=checkbox]:checked').length > 4) {
+                $(this).prop('checked', false);
+                $(':submit').attr("disabled", false)
+            }
+        });
+    </script>
+{% endblock %}
